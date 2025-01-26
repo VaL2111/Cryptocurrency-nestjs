@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
-import { UserService } from './user.service';
+/* eslint-disable */
 
-@Controller('user')
+import { Body, Controller, Post } from "@nestjs/common";
+import { UserService } from "./user.service";
+import { CreateUserDTO } from "src/user/dto";
+
+@Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-	@Get('get-all-users')
-  getUsers() {
-    return this.userService.getUsers();
+  @Post("create-user")
+  createUsers(@Body() dto: CreateUserDTO) {
+    return this.userService.createUser(dto);
   }
 }
