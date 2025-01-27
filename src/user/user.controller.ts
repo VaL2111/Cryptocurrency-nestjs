@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { Body, Controller, Post } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "src/user/dto";
