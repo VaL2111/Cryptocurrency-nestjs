@@ -1,11 +1,12 @@
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { UserModule } from "src/user/user.module";
+import { UserModule } from "src/modules/user/user.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
-import configurations from "../configurations";
-import { User } from "src/user/models/user.model";
+import configurations from "../../configurations";
+import { User } from "src/modules/user/models/user.model";
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { User } from "src/user/models/user.model";
       }),
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
