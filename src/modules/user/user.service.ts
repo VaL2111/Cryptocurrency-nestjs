@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { User } from "src/modules/user/models/user.model";
 import * as bcrypt from "bcrypt";
 import { CreateUserDTO } from "src/modules/user/dto";
+import { AuthUserResponse } from "../auth/response";
 
 @Injectable()
 export class UserService {
@@ -27,5 +28,12 @@ export class UserService {
       password: dto.password,
     });
     return dto;
+  }
+
+  async publicUser(email: string): Promise<Omit<AuthUserResponse, "token"> | null> {
+    return this.userRepository.findOne({
+      where: { email: email },
+      attributes: { exclude: ["password"] },
+    });
   }
 }

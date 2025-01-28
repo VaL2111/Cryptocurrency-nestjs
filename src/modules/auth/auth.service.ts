@@ -30,6 +30,8 @@ export class AuthService {
     if (!validatePassword) throw new BadRequestException(AppError.WRONG_DATA);
 
     const token = await this.tokenService.generateToken(dto.email);
-    return { ...existUser, token };
+    const user = await this.userService.publicUser(dto.email);
+		if (!user) throw new BadRequestException(AppError.USER_NOT_EXIST);
+    return { ...user, token };
   }
 }
