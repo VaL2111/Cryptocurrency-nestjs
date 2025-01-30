@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
-  Patch,
   Post,
   Query,
   Req,
@@ -25,18 +23,11 @@ export class WatchlistController {
     return this.watchlistService.createAsset(user, assetDto);
   }
 
-  @Get("get-all")
-  getAllAssets() {
-    return;
-  }
-
-  @Patch("update")
-  updateAsset() {
-    return;
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Delete()
-  deleteAsset(@Query("id") id: string) {
-    return;
+  deleteAsset(@Query("id") assetId: string, @Req() request): Promise<boolean> {
+    // eslint-disable-next-line
+    const { id } = request.user;
+    return this.watchlistService.deleteAsset(Number(id), assetId);
   }
 }
