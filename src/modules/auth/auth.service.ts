@@ -20,7 +20,7 @@ export class AuthService {
     return this.userService.createUser(dto);
   }
 
-  async loginUser(dto: UserLoginDTO): Promise<AuthUserResponse> {
+  async loginUser(dto: UserLoginDTO): Promise<any> {
     const existUser = await this.userService.findUserByEmail(dto.email);
     if (!existUser) throw new BadRequestException(AppError.USER_NOT_EXIST);
     const validatePassword = await bcrypt.compare(
@@ -29,13 +29,9 @@ export class AuthService {
     );
     if (!validatePassword) throw new BadRequestException(AppError.WRONG_DATA);
 
-		const userData = {
-			name: existUser.firstName,
-			email: existUser.email,
-		}
-    const token = await this.tokenService.generateToken(userData);
     const user = await this.userService.publicUser(dto.email);
-		if (!user) throw new BadRequestException(AppError.USER_NOT_EXIST);
-    return { ...user, token };
+    const token = await this.tokenService.generateToken(user);
+    if (!user) throw new BadRequestException(AppError.USER_NOT_EXIST);
+    return { user, token };
   }
 }
