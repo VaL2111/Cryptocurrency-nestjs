@@ -4,7 +4,6 @@ import { CreateUserDTO } from "../user/dto";
 import { AppError } from "src/common/constants/errors";
 import * as bcrypt from "bcrypt";
 import { UserLoginDTO } from "./dto";
-import { AuthUserResponse } from "./response";
 import { TokenService } from "../token/token.service";
 
 @Injectable()
@@ -30,8 +29,8 @@ export class AuthService {
     if (!validatePassword) throw new BadRequestException(AppError.WRONG_DATA);
 
     const user = await this.userService.publicUser(dto.email);
+		if (!user) throw new BadRequestException(AppError.USER_NOT_EXIST);
     const token = await this.tokenService.generateToken(user);
-    if (!user) throw new BadRequestException(AppError.USER_NOT_EXIST);
     return { user, token };
   }
 }

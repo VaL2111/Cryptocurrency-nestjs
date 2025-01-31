@@ -33,8 +33,8 @@ export class UserService {
 
   async publicUser(
     email: string,
-  ): Promise<Omit<AuthUserResponse, "token"> | null> {
-    return this.userRepository.findOne({
+  ): Promise<AuthUserResponse | User | null> {
+    return await this.userRepository.findOne({
       where: { email: email },
       attributes: { exclude: ["password"] },
       include: {
