@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { Watchlist } from "./models/watchlist.model";
+import { CreateAssetResponse } from "./response";
 
 @Injectable()
 export class WatchlistService {
@@ -9,9 +10,11 @@ export class WatchlistService {
     private readonly watchlistRepository: typeof Watchlist,
   ) {}
 
-  async createAsset(user, dto: { name: string; assetId: string }) {
+  async createAsset(
+    user: { id: number },
+    dto: { name: string; assetId: string },
+  ): Promise<CreateAssetResponse> {
     const watchlist = {
-      // eslint-disable-next-line
       user: user.id,
       name: dto.name,
       assetId: dto.assetId,
@@ -24,7 +27,6 @@ export class WatchlistService {
     await this.watchlistRepository.destroy({
       where: { id: assetId, user: userId },
     });
-
     return true;
   }
 }
