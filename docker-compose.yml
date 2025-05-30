@@ -6,11 +6,11 @@ services:
     ports: 
       - "5432:5432"
     environment:
-      - POSTGRES_HOST=localhost
       - POSTGRES_USER=lesson
       - POSTGRES_PASSWORD=lesson
-      - POSTGRES_DATABASE=lesson
-    command: postgres
+      - POSTGRES_DB=lesson
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     restart: always
 
   redis:
@@ -18,3 +18,24 @@ services:
     container_name: redis-lesson
     ports:
       - "6379:6379"
+
+  app:
+    build: .
+    container_name: cryptocurrency-app
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_HOST=lesson
+      - DB_PORT=5432
+      - DB_USER=lesson
+      - DB_PASSWORD=lesson
+      - DB_NAME=lesson
+      - SECRET=VeryHardSecret
+      - EXPIRE_JWT=24h
+    depends_on:
+      - postgresql
+      - redis
+
+volumes:
+  pgdata:
